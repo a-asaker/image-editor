@@ -191,7 +191,11 @@ def text(x,y):
 		if k == 27:
 			break
 		elif k in [225,226]:
-			k = cv.waitKey(0)-32
+			k = cv.waitKey(0)
+			if k in range(ord('a'),ord('z')):
+				k=k-32
+			else:
+				pass
 		elif k is 229:
 			cap = not cap
 			k = 0
@@ -200,12 +204,14 @@ def text(x,y):
 			i = 0
 			k = 0
 		elif k is 8:
-			print(color)
 			cv.rectangle(img, (x+i-42,y-48),(x+i+20,y+20),bg_color[::-1], -1, 8)
 			k=0
 			i-=80
 		if cap :
-			k = k-32
+			if k in range(ord('a'),ord('z')):
+				k=k-32
+			else:
+				pass
 		try:
 			cv.putText(img, chr(k) , (x+i,y), font,1.5, color, width*2, cv.LINE_AA)
 			cv.putText(img, chr(k) , (x+i,y), font,1.5, color[::-1],width , cv.LINE_AA)
