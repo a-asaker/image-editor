@@ -194,6 +194,8 @@ def text(x,y):
 			k = cv.waitKey(0)
 			if k in range(ord('a'),ord('z')):
 				k=k-32
+			elif k in [225,226]:
+				continue
 			else:
 				pass
 		elif k is 229:
