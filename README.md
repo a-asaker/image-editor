@@ -74,6 +74,7 @@ By : a-asaker.
      color      | `c` `o`
      width      | [`1`,`2`,`3`,..,`9`]
      save       | `s`
+     undo crop  | `u`
      no mode    | `n`
      help       | `h`
      exit       | `esc`
@@ -91,4 +92,8 @@ By : a-asaker.
      orange | `o`
      black  | `b` `k`
      blue   | `b` `l`
+ 
+ * For Drawing/Crop Mode: Draw Using Drag-Drop [Drag At The Beginning Point, Drop At The Ending Point].
+ 
+ * For Text Mode: Click On The Image At The Point You Want To Start Typing From, Then Start Typing. After Finishing Your Text Press `esc`.
      
