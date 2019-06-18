@@ -191,7 +191,7 @@ def text(x,y):
 		if k == 27:
 			break
 		elif k in [225,226]:
-			k = cv2.waitKey(0)-32
+			k = cv.waitKey(0)-32
 		elif k is 229:
 			cap = not cap
 			k = 0
