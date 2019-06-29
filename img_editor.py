@@ -136,7 +136,7 @@ elif arg_action=="image":
 			print("[X] Can't Open The Image.")
 	elif "--image" in dict_opts:
 		try:
-			img = cv.imread(dict_opts["-image"])
+			img = cv.imread(dict_opts["--image"])
 		except:
 			print("[x} Can't Open The Image.")
 
