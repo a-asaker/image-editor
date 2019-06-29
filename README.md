@@ -74,7 +74,7 @@ By : a-asaker.
      color      | `c` `o`
      width      | [`1`,`2`,`3`,..,`9`]
      save       | `s`
-     undo crop  | `u`
+     undo       | `u`
      no mode    | `n`
      help       | `h`
      exit       | `esc`
@@ -97,3 +97,4 @@ By : a-asaker.
  
  * For Text Mode: Click On The Image At The Point You Want To Start Typing From, Then Start Typing. After Finishing Your Text Press `esc`.
      
+ * Undo Option : Only Undo The Last 6 Seconds Image
