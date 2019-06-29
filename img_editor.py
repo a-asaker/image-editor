@@ -3,12 +3,14 @@
 
 import getopt
 from sys import platform,argv
+# import pyautogui
 from mss import mss
-from time import sleep
+from time import sleep,time
 import cv2 as cv
 import numpy as np
 from subprocess import call
-
+from os import remove
+from random import randint
 def usage():
 	print('''\t \t Image Editor | By A_Asaker
 Options :
@@ -44,6 +46,8 @@ except:
 	usage()
 	exit(0)
 
+tmp_img="tmp_img"+str(randint)+".png"
+t_l=0
 font = cv.FONT_HERSHEY_COMPLEX
 arg_action=""
 dict_opts=dict(opts)
@@ -82,6 +86,7 @@ modes=''' Modes/Options Keys :
 	save      : s
 	no mode   : n
 	help      : h
+	undo      : u #Undo Last 6 Seconds' Image
 	exit      : esc
 	print mode  : m
 	print width : w'''
@@ -113,7 +118,6 @@ if arg_action=="create":
 		bg_color=tuple([int(x) for x in dict_opts["-b"].split(",")])
 	elif "--background" in dict_opts:
 		bg_color=tuple([int(x) for x in dict_opts["--background"].split(",")])
-		#np.unit8 ==> 8-bit unsigned integer (0 to 255).
 	img = np.full((height,img_width,3),bg_color[::-1],np.uint8)
 elif arg_action=="screen":
 	if "-d" in dict_opts:
@@ -126,10 +130,15 @@ elif arg_action=="screen":
 	img=np.array(screen,np.uint8)
 elif arg_action=="image":
 	if "-i" in dict_opts :
-		print("i")
-		img = cv.imread(dict_opts["-i"])
+		try:
+			img = cv.imread(dict_opts["-i"])
+		except:
+			print("[X] Can't Open The Image.")
 	elif "--image" in dict_opts:
-		img = cv.imread(dict_opts["--image"])
+		try:
+			img = cv.imread(dict_opts["-image"])
+		except:
+			print("[x} Can't Open The Image.")
 
 def events(event, x,y,flags,param):
 	global 	start_point,end_point,draw_mode
@@ -167,19 +176,22 @@ def d_line(start_point,end_point):
 
 def crop(start_point,end_point):
 	global img
-	if start_point[1]<=end_point[1]:
-		start_y=start_point[1]
-		end_y=end_point[1]
+	if start_point==end_point:
+		pass
 	else:
-		end_y=start_point[1]
-		start_y=end_point[1]
-	if start_point[0]<=end_point[0]:
-		start_x=start_point[0]
-		end_x=end_point[0]
-	else:
-		end_x=start_point[0]
-		start_x=end_point[0]
-	img=img[start_y:end_y, start_x:end_x]
+		if start_point[1]<=end_point[1]:
+			start_y=start_point[1]
+			end_y=end_point[1]
+		else:
+			end_y=start_point[1]
+			start_y=end_point[1]
+		if start_point[0]<=end_point[0]:
+			start_x=start_point[0]
+			end_x=end_point[0]
+		else:
+			end_x=start_point[0]
+			start_x=end_point[0]
+		img=img[start_y:end_y, start_x:end_x]
 
 def text(x,y):
 	i = 0
@@ -243,6 +255,10 @@ while True:
 			call('cls',shell=True)
 		clr=1
 		print(modes)
+	t_n=time()
+	if t_n-t_l>6:
+		cv.imwrite(tmp_img,img)
+		t_l=time()
 	if k == 27:
 		img_action=""
 		print(">>> Do You Want To Save The Image? [y|n]")
@@ -277,9 +293,9 @@ while True:
 				color=(255, 0, 255)
 			elif k==98:
 				k=cv.waitKey(0)
-				if k==107:#k
+				if k==107:
 					color=(0,0,0)
-				elif k==108:#l
+				elif k==108:
 					color=(0,0,255)
 			else:print(">Unknown Color !")
 			print(">> color(RGB)_ = {} ".format(color))
@@ -300,13 +316,16 @@ while True:
 		width=int(chr(k))
 		print(">> width = {} ".format(width))
 	elif k == 115:
+		# img_action=""
+		# print("mode : no mode")
 		save()
 	elif k == ord('n'):
 		img_action=""
 		print(">> mode : no mode")
 	elif k == ord('u'):
-		img=undo_crop
-		print(">> crop undone")
+		img=cv.imread(tmp_img)
+		# img=undo_crop
+		print("> undone")
 	elif k == ord('h'):
 		print(modes)
 	elif k == ord('w'):
@@ -314,3 +333,4 @@ while True:
 	elif k == ord('m'):
 		print(">> mode : {} mode ".format(img_action))
 cv.destroyAllWindows()
+remove(tmp_img)
