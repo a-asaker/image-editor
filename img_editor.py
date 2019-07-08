@@ -2,7 +2,7 @@
 # Coded By : A_Asaker
 
 import getopt
-from sys import platform,argv
+from sys import platform,argv,stdout
 # import pyautogui
 from mss import mss
 from time import sleep,time
@@ -261,10 +261,14 @@ while True:
 		t_l=time()
 	if k == 27:
 		img_action=""
-		print(">>> Do You Want To Save The Image? [y|n]")
+		print(">>> Do You Want To Save The Image? [y|n]:",end=" ")
+		stdout.flush()
 		k=cv.waitKey(0)
+		print(chr(k))
 		if k==ord("y"):
 			save()
+		else:
+			print(">> not saved.")
 		break
 	elif k == 99:#c
 		k = cv.waitKey(0)
